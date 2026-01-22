@@ -1,4 +1,5 @@
 ﻿import { useState, useEffect } from 'react';
+import { Riple } from 'react-loading-indicators';
 import { useAuth } from './hooks/useAuth';
 import { usePatrols } from './hooks/usePatrols.ts';
 import type { Patrol, Level } from './types/game';
@@ -80,7 +81,7 @@ function App() {
     return (
       <div className="min-h-screen bg-[#0f0f1e] flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-[#4ecdc4] border-t-transparent animate-spin mx-auto mb-4" />
+          <Riple color="#d9d9d9" size="medium" text="" textColor="" />
           <p className="text-[#00ff00] text-sm animate-pulse">ŁADOWANIE...</p>
         </div>
       </div>
