@@ -185,7 +185,7 @@ function App() {
                         <div className="flex flex-col md:flex-row md:items-end justify-center gap-4 md:gap-8 mb-8">
                           {/* 1st place - mobile first, desktop center (tallest) */}
                           {first && (
-                            <div className="flex flex-col items-center w-full md:flex-1 md:max-w-sm md:order-2">
+                            <div className="flex flex-col items-center w-full md:flex-1 md:order-2">
                               <div 
                                 className="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center border-4 border-[#ffd700] text-white text-2xl md:text-3xl mb-2"
                                 style={{ backgroundColor: patrol.color }}
@@ -209,7 +209,7 @@ function App() {
                           
                           {/* 2nd place - mobile second, desktop left */}
                           {second && (
-                            <div className="flex flex-col items-center w-full md:flex-1 md:max-w-xs md:order-1">
+                            <div className="flex flex-col items-center w-full md:flex-1 md:order-1">
                               <div 
                                 className="w-14 h-14 md:w-16 md:h-16 flex items-center justify-center border-4 border-[#c0c0c0] text-white text-xl md:text-2xl mb-2"
                                 style={{ backgroundColor: patrol.color }}
@@ -233,7 +233,7 @@ function App() {
                           
                           {/* 3rd place - mobile third, desktop right */}
                           {third && (
-                            <div className="flex flex-col items-center w-full md:flex-1 md:max-w-xs md:order-3">
+                            <div className="flex flex-col items-center w-full md:flex-1 md:order-3">
                               <div 
                                 className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center border-4 border-[#cd7f32] text-white text-lg md:text-xl mb-2"
                                 style={{ backgroundColor: patrol.color }}
