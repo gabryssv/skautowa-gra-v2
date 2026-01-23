@@ -1,6 +1,5 @@
 ﻿﻿import { useState, useEffect } from 'react';
 import { Riple } from 'react-loading-indicators';
-import { Riple } from 'react-loading-indicators';
 import { useAuth } from './hooks/useAuth';
 import { usePatrols } from './hooks/usePatrols.ts';
 import type { Patrol, Level } from './types/game';
