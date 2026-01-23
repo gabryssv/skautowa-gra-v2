@@ -138,36 +138,52 @@ function App() {
 
       {/* Widok główny: porównanie zastępów (zbiórki, zadania, poziom) */}
       {!activePatrol && (
-        <div className="w-full max-w-3xl mx-auto bg-black/40 border-4 border-[#4ecdc4] p-8 rounded-xl mb-12">
+        <div className="w-full max-w-4xl mx-auto mb-12">
           <h2 className="text-2xl text-white mb-8 text-center">Porównanie zastępów</h2>
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {patrols.map((patrol) => {
-              // Suma zbiórek (wszystkie levele, zadanie z nazwą "zbiórki")
               const totalZbiorki = patrol.levels.reduce((sum, lvl) => {
                 const zbTask = lvl.tasks.find(t => t.name.toLowerCase().includes('zbiórki'));
                 return sum + (zbTask ? zbTask.current : 0);
               }, 0);
-              // Suma zadań na stopień + funkcji (wszyscy członkowie)
               const totalTasks = patrol.members.reduce((sum, m) => sum + m.tasksStopien + m.tasksFunkcja, 0);
               return (
-                <div key={patrol.id} className="flex flex-col md:flex-row items-center justify-between gap-6 bg-[#1a1a2e] border-2 border-gray-700 rounded-lg p-6">
-                  <div className="flex items-center gap-3 min-w-[120px]">
-                    <span className="text-3xl">{patrol.name.includes('Wilk') ? '🐺' : '🦩'}</span>
-                    <span className="text-lg text-white font-bold">{patrol.name}</span>
+                <Card key={patrol.id} className="overflow-hidden border-4" style={{ borderColor: patrol.color, boxShadow: `0 4px 0 ${patrol.color}, 0 8px 0 rgba(0,0,0,0.5)` }}>
+                  <div className="h-2 transition-all duration-500 relative" style={{ backgroundColor: '#0f0f1e' }}>
+                    <div
+                      className="h-full"
+                      style={{
+                        width: `${(patrol.currentLevel / patrol.levels.length) * 100}%`,
+                        backgroundColor: patrol.color,
+                        backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(0,0,0,0.3) 4px, rgba(0,0,0,0.3) 8px)'
+                      }}
+                    />
                   </div>
-                  <div className="flex flex-col items-center">
-                    <span className="text-[#ffd700] text-2xl font-bold">{totalZbiorki}</span>
-                    <span className="text-gray-300 text-xs">Zbiórek łącznie</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <span className="text-[#00ff00] text-2xl font-bold">{totalTasks}</span>
-                    <span className="text-gray-300 text-xs">Zadania na stopień + funkcji</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <span className="text-white text-2xl font-bold">{patrol.currentLevel}</span>
-                    <span className="text-gray-300 text-xs">Aktualny poziom</span>
-                  </div>
-                </div>
+                  <CardContent className="py-8">
+                    <div className="flex items-center justify-between mb-6 flex-wrap gap-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 flex items-center justify-center border-4 border-black text-2xl" style={{ backgroundColor: patrol.color }}>
+                          {patrol.name.includes('Wilk') ? '🐺' : '🦩'}
+                        </div>
+                        <div>
+                          <h2 className="text-white" style={{ textShadow: '3px 3px 0 rgba(0,0,0,0.5)' }}>{patrol.name.toUpperCase()}</h2>
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <span className="text-[#ffd700] text-2xl font-bold">{totalZbiorki}</span>
+                        <span className="text-gray-300 text-xs">Zbiórek łącznie</span>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <span className="text-[#00ff00] text-2xl font-bold">{totalTasks}</span>
+                        <span className="text-gray-300 text-xs">Zadania na stopień + funkcji</span>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <span className="text-white text-2xl font-bold">{patrol.currentLevel}</span>
+                        <span className="text-gray-300 text-xs">Aktualny poziom</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               );
             })}
           </div>
