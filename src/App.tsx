@@ -112,7 +112,7 @@ function App() {
       </div>
 
       {/* Patrol Tabs */}
-      <Tabs value={activePatrol} onValueChange={setActivePatrol} className="w-full max-w-8xl mx-auto">
+      <Tabs value={activePatrol} onValueChange={setActivePatrol} className="w-full max-w-[88rem] mx-auto">
         <TabsList className="grid w-full bg-black/50 border-4 border-gray-700 mb-6 h-auto p-1"
           style={{ gridTemplateColumns: `repeat(${patrols.length || 1}, 1fr)` }}>
           {patrols.map((patrol) => (
