@@ -7,7 +7,7 @@ import type { Member } from './types/game';
 import { PatrolProgress } from './components/PatrolProgress';
 import { LevelCard } from './components/LevelCard';
 import { PatrolLeaderPanel } from './components/PatrolLeaderPanel.tsx';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
+
 import { Card, CardContent } from './components/ui/card';
 import { Shield, Trophy } from 'lucide-react';
 import confetti from 'canvas-confetti';
