@@ -6,10 +6,9 @@ import { Button } from "./ui/button";
 interface PatrolProgressProps {
   patrol: Patrol;
   onOpenLeaderPanel: () => void;
-  hideActions?: boolean;
 }
 
-export function PatrolProgress({ patrol, onOpenLeaderPanel, hideActions }: PatrolProgressProps) {
+export function PatrolProgress({ patrol, onOpenLeaderPanel }: PatrolProgressProps) {
   const totalLevels = patrol.levels.length;
   const completedLevels = patrol.levels.filter(l => l.isCompleted).length;
   
@@ -63,16 +62,14 @@ export function PatrolProgress({ patrol, onOpenLeaderPanel, hideActions }: Patro
               </p>
             </div>
 
-            {!hideActions && (
-              <Button
-                onClick={onOpenLeaderPanel}
-                className="bg-[#4ecdc4] hover:bg-[#3ab8ae] text-black border-4 border-[#2a8c83]"
-                style={{ boxShadow: '0 4px 0 #2a8c83' }}
-              >
-                <Users className="w-4 h-4 mr-2" />
-                PANEL ZASTĘPOWEGO
-              </Button>
-            )}
+            <Button
+              onClick={onOpenLeaderPanel}
+              className="bg-[#4ecdc4] hover:bg-[#3ab8ae] text-black border-4 border-[#2a8c83]"
+              style={{ boxShadow: '0 4px 0 #2a8c83' }}
+            >
+              <Users className="w-4 h-4 mr-2" />
+              PANEL ZASTĘPOWEGO
+            </Button>
           </div>
         </div>
 
