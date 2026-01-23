@@ -136,56 +136,77 @@ function App() {
         </div>
       </div>
 
-      {/* Widok główny: statystyki i porównania */}
+      {/* Widok główny: layout jak w zastępie, ale ogólne statystyki */}
       {!activePatrol && (
-        <div className="w-full max-w-4xl mx-auto bg-black/40 border-4 border-[#4ecdc4] p-8 rounded-xl mb-12">
-          <h2 className="text-2xl text-white mb-6 text-center">Statystyki ogólne i porównanie zastępów</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {patrols.map((patrol) => {
-              const totalZbiorki = patrol.levels.reduce((sum, lvl) => {
-                const zbTask = lvl.tasks.find(t => t.name.toLowerCase().includes('zbiórki'));
-                return sum + (zbTask ? zbTask.current : 0);
-              }, 0);
-              const totalTasks = patrol.members.reduce((sum, m) => sum + m.tasksStopien + m.tasksFunkcja, 0);
-              return (
-                <div key={patrol.id} className="bg-[#1a1a2e] border-2 border-gray-700 rounded-lg p-6 flex flex-col items-center">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-2xl">{patrol.name.includes('Wilk') ? '🐺' : '🦩'}</span>
-                    <span className="text-lg text-white">{patrol.name}</span>
-                  </div>
-                  <div className="text-[#00ff00] text-3xl font-bold mb-2">{totalTasks}</div>
-                  <div className="text-gray-300 text-sm mb-1">Zadań zaliczonych (łącznie)</div>
-                  <div className="text-[#ffd700] text-xl font-bold mb-2">{totalZbiorki}</div>
-                  <div className="text-gray-300 text-sm">Zbiórek przeprowadzonych</div>
-                </div>
-              );
-            })}
-          </div>
-          {/* Top 5 członków wszystkich zastępów */}
-          <div className="mt-12">
-            <h3 className="text-lg text-white mb-4 text-center">Top 5 członków (wszystkie zastępy)</h3>
-            <div className="space-y-2">
-              {patrols
-                .flatMap(patrol => patrol.members.map(m => ({
-                  ...m,
-                  patrolName: patrol.name,
-                  totalTasks: m.tasksStopien + m.tasksFunkcja,
-                  patrolColor: patrol.color
-                })))
-                .sort((a, b) => b.totalTasks - a.totalTasks)
-                .slice(0, 5)
-                .map((member, idx) => (
-                  <div key={member.id} className="flex items-center gap-4 p-3 border-2 border-gray-700 bg-black/30 rounded">
-                    <span className="text-gray-400 text-sm w-8">{idx + 1}.</span>
-                    <span className="text-white text-sm flex-1 truncate">{member.name} <span className="ml-2 text-xs" style={{ color: member.patrolColor }}>{member.patrolName}</span></span>
-                    <span className="text-gray-400 text-sm">ST: {member.tasksStopien}</span>
-                    <span className="text-gray-400 text-sm">FN: {member.tasksFunkcja}</span>
-                    <span className="text-[#00ff00] text-sm font-bold w-12 text-right">{member.totalTasks}</span>
-                  </div>
-                ))}
+        <>
+          {/* Ogólny pasek postępu (sumaryczny poziom wszystkich zastępów) */}
+          <div className="mb-10">
+            <div className="flex items-center gap-3 mb-6">
+              <Trophy className="w-6 h-6 text-[#ffd700]" />
+              <h3 className="text-white text-lg">TOP ZASTĘPY</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {patrols.map((patrol) => (
+                <PatrolProgress
+                  key={patrol.id}
+                  patrol={patrol}
+                  onOpenLeaderPanel={() => setActivePatrol(patrol.id)}
+                  hideActions
+                />
+              ))}
             </div>
           </div>
-        </div>
+
+          {/* Poziomy (karty) - sumarycznie dla wszystkich zastępów */}
+          <div className="mt-10">
+            <h3 className="text-white text-lg mb-4">Poziomy wszystkich zastępów</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {patrols.flatMap((patrol) =>
+                patrol.levels.map((level) => (
+                  <LevelCard
+                    key={patrol.id + '-' + level.level}
+                    level={level}
+                    patrolColor={patrol.color}
+                    allLevels={patrol.levels}
+                  />
+                ))
+              )}
+            </div>
+          </div>
+
+          {/* Top członkowie (jak leaderboard) */}
+          <Card className="border-4 border-[#ffd700] mt-10" style={{ boxShadow: '0 4px 0 #b8860b' }}>
+            <CardContent className="py-6">
+              <div className="flex items-center gap-3 mb-6">
+                <Trophy className="w-6 h-6 text-[#ffd700]" />
+                <h3 className="text-white text-lg">TOP 5 CZŁONKÓW (WSZYSTKIE ZASTĘPY)</h3>
+              </div>
+              {(() => {
+                const allMembers = patrols
+                  .flatMap(patrol => patrol.members.map(m => ({
+                    ...m,
+                    patrolName: patrol.name,
+                    totalTasks: m.tasksStopien + m.tasksFunkcja,
+                    patrolColor: patrol.color
+                  })));
+                const sorted = allMembers.sort((a, b) => b.totalTasks - a.totalTasks).slice(0, 5);
+                return (
+                  <div className="space-y-2">
+                    {sorted.map((member, idx) => (
+                      <div key={member.id} className="flex items-center gap-4 p-3 border-2 border-gray-700 bg-black/30 rounded">
+                        <span className="text-gray-400 text-sm w-8">{idx + 1}.</span>
+                        <span className="text-white text-sm flex-1 truncate">{member.name} <span className="ml-2 text-xs" style={{ color: member.patrolColor }}>{member.patrolName}</span></span>
+                        <span className="text-gray-400 text-sm">ST: {member.tasksStopien}</span>
+                        <span className="text-gray-400 text-sm">FN: {member.tasksFunkcja}</span>
+                        <span className="text-[#00ff00] text-sm font-bold w-12 text-right">{member.totalTasks}</span>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
+            </CardContent>
+          </Card>
+        </>
       )}
 
       {/* Widok zastępu */}
